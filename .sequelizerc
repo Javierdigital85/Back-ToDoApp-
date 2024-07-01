@@ -7,4 +7,4 @@ module.exports = {
   "models-path": path.resolve("./src/database/models"), //configurar la ruta de los modelos de la base de datos
   "seeders-path": path.resolve("./src/database/seeders"), //configurar la ruta de los seeders de la base de datos
   "migrations-path": path.resolve("./src/database/migrations"), // configurar la ruta de las migraciones de la base de datos
-};
+}

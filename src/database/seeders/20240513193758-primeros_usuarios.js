@@ -10,12 +10,12 @@ module.exports = {
           id: "1",
         },
         defaults: {
-          name: "Node",
-          profesion: "Pilot",
-          age: 51,
+          name: "Javier",
+          profesion: "Software Developer",
+          age: 38,
           password: "asdf",
-          email: "prueba@prueba.com",
-          country: "Brazil",
+          email: "javiercolodro@gmail.com",
+          country: "Argentina",
         },
       }),
       User.findOrCreate({
@@ -23,12 +23,25 @@ module.exports = {
           id: "2",
         },
         defaults: {
+          name: "NODE",
+          profesion: "Coder",
+          age: 43,
+          password: "asdf",
+          email: "pruebaUno@prueba.com",
+          country: "Dinamarca",
+        },
+      }),
+      User.findOrCreate({
+        where: {
+          id: "3",
+        },
+        defaults: {
           name: "React",
           profesion: "Coder",
           age: 43,
           password: "asdf",
           email: "pruebaDos@prueba.com",
-          country: "Argentina",
+          country: "Japon",
         },
       }),
     ]);

@@ -1,49 +1,36 @@
 const errors = require("../const/errors");
-
-const { Task } = require("../models");
+const { Task } = require("../database/models");
 
 module.exports = {
   crear: async (req, res, next) => {
     try {
       // const { title, description } = req.body;
       const task = await Task.create(req.body);
-      res.send(task);
+      return res.status(201).send(task);
     } catch (error) {
       return next(errors.tareaCreada);
     }
   },
 
-  // crear: async (req, res, next) => {
-  //   try {
-  //     const { userId, title, description } = req.body; // Asegúrate de que req.body contenga el userId
-  //     const task = await Task.create({ userId, title, description }); // Crea la tarea con los datos proporcionados en el cuerpo de la solicitud
-  //     const taskId = task.id;
-
-  //     await task.update({ taskId });
-  //     res.send(task);
-  //   } catch (error) {
-  //     return next(errors.tareaCreada);
-  //   }
-  // },
-
   obtener: async (req, res, next) => {
     try {
-      const { userId } = req.query; //obtengo por clave y valor lo que envia el front
+      const { userId } = req.query; //obtengo por clave y valor lo que envia el front por parametro de consulta
       let tasks;
       if (userId) {
         tasks = await Task.findAll({ where: { userId: userId } });
       } else {
         tasks = await Task.findAll();
       }
-      res.send(tasks);
+      res.status(200).send(tasks);
     } catch (error) {
-      return next(error);
+      return next(errors.tareaInexistente);
     }
   },
+
   obtenerSingle: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const taskId = await Task.findByPk(id);
+      const taskId = await Task.findByPk(Number(id));
       if (!taskId) return next(errors.tareaInexistente);
       res.send(taskId);
     } catch (error) {
@@ -69,17 +56,18 @@ module.exports = {
           .status(errors.tareaActualizada.code)
           .send(errors.tareaActualizada.message);
       } else {
-        res.status(200).send(task);
+        res.status(200).send(task[0]);
       }
     } catch (error) {
-      return next(error);
+      next(error);
     }
   },
+
   deleteTask: async (req, res, next) => {
     const { id } = req.params;
     const task = await Task.findByPk(id);
     try {
-      if (!task) return next(errors.tareaEliminada);
+      if (!task) return next(errors.taskDelete.message);
       await Task.destroy({ where: { id: id } });
       console.log(id);
       res.sendStatus(204);

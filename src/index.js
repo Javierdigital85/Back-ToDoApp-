@@ -1,41 +1,47 @@
-//requerimos express
-const express = require("express");
-const globalConstants = require("./const/globalConstants");
-const routerConfig = require("./routes/index.routes");
+const app = require("./app");
 const db = require("./db");
-const cookieParser = require("cookie-parser");
-const cors = require("cors");
-const errorHandler = require("./middleware/error");
-let createError = require("http-errors");
-const morgan = require("morgan");
+const globalConstants = require("./const/globalConstants");
 
-const configuracionApi = (app) => {
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
-  app.use(cookieParser());
-  app.use(morgan("tiny"));
-};
-
-const configuracionRouter = (app) => {
-  app.use("/api/", routerConfig.rutas_init());
-  app.use(function (req, res, next) {
-    next(createError(404)); //si no se encuentra la ruta, se envia un error 404
-  });
-  app.use(errorHandler);
-};
-
-const init = () => {
-  const app = express(); //crea una instancia de express
-  app.use(cors({ origin: "http://localhost:3000", credentials: true }));
-
-  configuracionApi(app); //configurar la api
-  configuracionRouter(app); //configurar las rutas
-
-  db.sync({ force: false }).then(() => {
-    app.listen(globalConstants.PORT);
+db.sync({ force: false }).then(() => {
+  app.listen(globalConstants.PORT, () => {
     console.log(
-      "la aplicacion esta escuchando en el puerto: " + globalConstants.PORT
+      `La aplicación está escuchando en el puerto: ${globalConstants.PORT}`
     );
   });
-};
-init();
+});
+
+// const app = require("./app");
+// const db = require("./db");
+// const globalConstants = require("./const/globalConstants");
+// const dotenv = require("dotenv");
+
+// // Cargar variables de entorno según el entorno actual
+// dotenv.config({
+//   path: globalConstants.ENVIRONMENT === "test" ? ".env.test" : ".env",
+// });
+
+// // Función para iniciar la aplicación
+// async function startApp() {
+//   try {
+//     // Sincronizar la base de datos
+//     await db.sync({ force: globalConstants.ENVIRONMENT === "test" }); // Fuerza la sincronización en entorno de prueba
+
+//     // Iniciar la aplicación
+
+//     app.listen(globalConstants.PORT, () => {
+//       console.log(
+//         `La aplicación está escuchando en el puerto: ${globalConstants.PORT}`
+//       );
+//     });
+//   } catch (error) {
+//     console.error("Error al iniciar la aplicación:", error);
+//   }
+// }
+
+// // Lógica para manejar entornos de desarrollo, prueba y producción
+// if (require.main === module) {
+//   startApp(); // Iniciar la aplicación principal
+// }
+
+// // Exportar la aplicación para pruebas (opcional)
+// module.exports = app;

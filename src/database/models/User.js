@@ -1,5 +1,5 @@
 const Sequelize = require("sequelize");
-const db = require("../db");
+const db = require("../../db");
 const bcrypt = require("bcrypt");
 
 class User extends Sequelize.Model {
@@ -19,6 +19,9 @@ User.init(
       type: Sequelize.STRING,
       allowNull: false,
     },
+    // picture: {
+    //   type: Sequelize.STRING,
+    // },
     email: {
       type: Sequelize.STRING,
       validate: {
@@ -41,9 +44,7 @@ User.init(
     salt: {
       type: Sequelize.STRING,
     },
-    age: {
-      type: Sequelize.INTEGER,
-    },
+
     getDomainEmail: {
       type: Sequelize.VIRTUAL,
       get() {
