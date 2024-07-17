@@ -1,7 +1,7 @@
 module.exports = {
   validationError: {
     code: 422,
-    message: "Error de validacion",
+    message: "Error de validación",
   },
   faltanCampos: {
     code: 404,
@@ -41,6 +41,14 @@ module.exports = {
   },
   creacionUsuario: {
     code: 404,
-    message: "Datos de usuario incompletos",
+    message: "Ha ocurrido un error al registrarte",
   },
+  changePassword: {
+    code: 404,
+    message: "Error changing password"
+  },
+  eliminarUsuario: {
+    code:404,
+    message:"User does not exist in the database"
+  }
 };

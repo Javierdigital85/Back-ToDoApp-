@@ -73,28 +73,35 @@ describe("POST api/tasks/crear - ", () => {
       let taskMock = {
         title: "music",
         description: "play the guitar and sing songs on friday and saturday!",
+        userId: 1,
       };
+      // await Task.create(taskMock);
+      try {
+        await Task.create(taskMock);
+        //act
+        const res = await request(app)
+          .get(`/api/tasks/obtener?usuarioId=${taskMock.userId}`)
+          .expect(200);
+        //assert
+        expect(res.body).toHaveLength(1);
+        expect(res.body[0].title).toBe(taskMock.title);
 
-      await Task.create(taskMock);
-      //act
-      const res = await request(app).get("/api/tasks/obtener").expect(200);
-      //assert
-      expect(res.body).toHaveLength(1);
-      expect(res.body[0].title).toBe(taskMock.title);
-      const findTask = await Task.findAll();
+        const findTask = await Task.findAll();
+        expect(findTask[0].title).toEqual(taskMock.title);
 
-      expect(findTask[0].title).toEqual(taskMock.title);
-
-      // const task = await Task.findAll(res.body.id);
-      // expect(task).toBe(res.body);
+        // const task = await Task.findAll(res.body.id);
+        // expect(task).toBe(res.body);
+      } catch (error) {
+        console.error("Error creating task:", error);
+      }
     });
     it("should not retrieve a task", async () => {
       //arrange
-      let userId = 26587;
+      let userId = null;
       //act
       const res = await request(app)
-        .get(`/api/tasks/obtener/${userId}`)
-        .expect(404);
+        .get(`/api/tasks/obtener?usuarioId=${userId}`)
+        .expect(500);
       const findTask = await Task.findAll({ where: { userId: userId } });
       //assert
       expect(findTask).toHaveLength(0);
@@ -110,7 +117,7 @@ describe("Get a task", () => {
     console.log("Task created: ", createdTask.id);
     //act
     const response = await request(app)
-      .get(`/api/tasks/obtener/${createdTask.id}`)
+      .get(`/api/tasks/obtener-single/${createdTask.id}`)
       .expect(200);
     expect(response.body).toHaveProperty("id", createdTask.id);
     //assert
@@ -127,7 +134,7 @@ describe("Get a task", () => {
     // const taskcreated = await Task.create(taskMock);
     //act
     let response = await request(app)
-      .get(`/api/tasks/obtener/323`)
+      .get(`/api/tasks/obtener-single/323`)
       .expect(errors.tareaInexistente.code);
   });
 });

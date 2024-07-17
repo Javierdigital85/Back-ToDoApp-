@@ -5,8 +5,8 @@ module.exports = {
     username: globalConstants.DB_USERNAME,
     password: globalConstants.DB_PASSWORD,
     database: globalConstants.DB_NAME,
-    host: globalConstants.HOST,
-    dialect: globalConstants.DIALECT,
+    host: "localhost",
+    dialect: "postgres",
   },
   test: {
     username: "root",
@@ -19,7 +19,7 @@ module.exports = {
     username: globalConstants.DB_USERNAME,
     password: globalConstants.DB_PASSWORD,
     database: "database_production",
-    host: globalConstants.HOST,
-    dialect: globalConstants.DIALECT,
+    host: "localhost",
+    dialect: "postgres",
   },
 };

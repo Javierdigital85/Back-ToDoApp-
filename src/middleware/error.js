@@ -23,15 +23,25 @@ module.exports = function (err, req, res, next) {
     response.error.message = errors[errorKey].message;
   }
 
-  // if (err.message === "Not Found") {
-  //   response.error.code = 404;
-  //   response.error.message = "Not Found";
+  // if (errors[err.message]) {
+  //   response.error.code = errors[err.message].code;
+  //   response.error.message = errors[err.message].message;
   // }
-  if (err.message === "Not Found") {
-    let errorKey = "Notfound";
-    response.error.code = errors[errorKey].code;
-    response.error.message = errors[errorKey].message;
-  }
+
+  // // Manejo específico para error de tarea inexistente
+  // if (err.message === errors.tareaInexistente.message) {
+  //   response.error.code = errors.tareaInexistente.code;
+  //   response.error.message = errors.tareaInexistente.message;
+  // }
+  // if (err.message === errors[err.message]) {
+  //   response.error.code = errors[err.message].code;
+  //   response.error.message = errors[err.message].message;
+  // }
+  // if (err.message === "Not Found") {
+  //   let errorKey = "Notfound";
+  //   response.error.code = errors[errorKey].code;
+  //   response.error.message = errors[errorKey].message;
+  // }
 
   res.status(response.error.code).json(response);
 };

@@ -1,11 +1,11 @@
 const errors = require("../const/errors");
 const { Task } = require("../database/models");
+const taskServices = require("../services/tasks.services");
 
 module.exports = {
   crear: async (req, res, next) => {
     try {
-      // const { title, description } = req.body;
-      const task = await Task.create(req.body);
+      const task = await taskServices.createTask(req.body);
       return res.status(201).send(task);
     } catch (error) {
       return next(errors.tareaCreada);
@@ -14,27 +14,31 @@ module.exports = {
 
   obtener: async (req, res, next) => {
     try {
-      const { userId } = req.query; //obtengo por clave y valor lo que envia el front por parametro de consulta
+      const { usuarioId } = req.query; //obtengo por clave y valor lo que envia el front por parametro de consulta
+      console.log(usuarioId, "esto vale userId");
       let tasks;
-      if (userId) {
-        tasks = await Task.findAll({ where: { userId: userId } });
+
+      if (usuarioId) {
+        tasks = await taskServices.singleTask(usuarioId);
       } else {
-        tasks = await Task.findAll();
+        tasks = await taskServices.allTasks();
       }
       res.status(200).send(tasks);
     } catch (error) {
-      return next(errors.tareaInexistente);
+      return next(errors.tareaInexistente.code);
     }
   },
-
+  //Task.findByPk(Number(id));
   obtenerSingle: async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const taskId = await Task.findByPk(Number(id));
-      if (!taskId) return next(errors.tareaInexistente);
+      const { idTask } = req.params;
+      const taskId = await taskServices.oneTask(idTask);
+      if (!taskId) {
+        throw errors.tareaInexistente;
+      }
       res.send(taskId);
     } catch (error) {
-      return next(error);
+      next(error);
     }
   },
   updateTask: async (req, res, next) => {
@@ -67,7 +71,11 @@ module.exports = {
     const { id } = req.params;
     const task = await Task.findByPk(id);
     try {
-      if (!task) return next(errors.taskDelete.message);
+      // if (!task) return next(errors.taskDelete.message);
+      if (!task)
+        return res
+          .status(errors.taskDelete.code)
+          .send(errors.taskDelete.message);
       await Task.destroy({ where: { id: id } });
       console.log(id);
       res.sendStatus(204);

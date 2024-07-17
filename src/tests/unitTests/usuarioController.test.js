@@ -189,6 +189,7 @@ describe("Get all users", () => {
     { email: "saludos", name: "lorenzo" },
   ];
   req = { mockUsers };
+
   res = {
     send: jest.fn(),
     status: jest.fn(() => res), //res.status(200).send(user);

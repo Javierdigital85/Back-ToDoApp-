@@ -41,6 +41,14 @@ User.init(
       type: Sequelize.STRING,
       allowNull: false,
     },
+    token: {
+      type: Sequelize.TEXT,
+      allowNull: true,
+    },
+    oldPassword: {
+      type: Sequelize.TEXT,
+      allowNull: true,
+    },
     salt: {
       type: Sequelize.STRING,
     },
@@ -51,14 +59,13 @@ User.init(
         return this.email.substring(this.email.lastIndexOf("@") + 1);
       },
     },
-    deleteAt: {
-      type: Sequelize.DATE,
-      field: "deleted_at",
-    },
+    // deletedAt: {
+    //   type: Sequelize.DATE,
+    //   field: "deleted_at",
+    // },
   },
-
   {
-    paranoid: true,
+    // paranoid: true,
     sequelize: db, //coneciona  la base de datos
     modelName: "user", //el nombre del modelo
   }

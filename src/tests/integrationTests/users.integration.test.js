@@ -120,7 +120,6 @@ describe("GET info ", () => {
     };
     let createUser = await User.create(mockUser);
     let userId = createUser.id;
-
     const res = await request(app)
       .get(`/api/usuarios/usuario/${userId}`)
       .expect(200);
@@ -129,7 +128,7 @@ describe("GET info ", () => {
   });
   it("should give an error if id is not provided", async () => {
     const res = await request(app)
-      .get(`/api/usuarios/usuario/`)
+      .get(`/api/usuarios/usuario/gafs`)
       .expect(errors.usuarioInexistente.code);
   });
 });
@@ -159,25 +158,37 @@ describe("Get /api/usuarios/todos", () => {
       .send(userCreated);
     expect(res.body.length).toBeGreaterThan(0);
   });
-  it("should handle error", async () => {
-    await request(app)
-      .get("/api/usuarios/todos3fd")
+  it("no user on database", async () => {
+    await User.destroy({ where: {} });
+    const res = await request(app)
+      .get("/api/usuarios/todos")
       .expect(errors.usuarioInexistente.code);
   });
 });
 
 describe("Delete", () => {
   it("should delete a user", async () => {
-    let userId = 1;
-    await User.destroy({ where: { id: userId } });
+    const mockUser = await User.create({
+      name: "Test User",
+      profesion: "Tester",
+      email: "test@example.com",
+      password: "test123",
+      country: "Testland",
+    });
+    const userId = mockUser.id;
+
+    // await User.destroy({ where: { id: userId } });
     const res = await request(app)
-      .delete(`/api/usuarios/${userId}`)
+      .delete(`/api/usuarios/usuario/${userId}`)
       .expect(202);
+    const deletedUser = await User.findByPk(userId);
+    expect(deletedUser).toBe(null);
   });
 
-  it("should give an error when user can not be eliminated", async () => {
-    await request(app)
-      .delete(`/api/usuarios/`)
+  it("should give an error when user does not exist", async () => {
+    const userId = 123;
+    const res = await request(app)
+      .delete(`/api/usuarios/usuario/${userId}`)
       .expect(errors.usuarioInexistente.code);
   });
 });
