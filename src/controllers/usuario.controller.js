@@ -48,19 +48,19 @@ module.exports = {
       };
       const token = generateToken(payload);
       res.cookie("token", token);
-      res.send(payload);
+      return res.send({ token, ...payload });
     } catch (error) {
-      res.sendStatus(500);
+      return res.sendStatus(500);
     }
   },
 
   logout: async (req, res) => {
     res.clearCookie("token");
-    res.sendStatus(204);
+    return res.sendStatus(204);
   },
 
   me: async (req, res) => {
-    res.send(req.user);
+    return res.send(req.user);
   },
 
   listarInfo: async (req, res, next) => {
@@ -94,10 +94,10 @@ module.exports = {
           message: errors.usuarioInexistente.message,
         });
       }
-      res.status(200).send(user);
+      return res.status(200).send(user);
     } catch (error) {
       console.log(error);
-      res.status(500).send("Error retrieving users");
+      return res.status(500).send("Error retrieving users");
     }
   },
 
@@ -112,9 +112,9 @@ module.exports = {
           .status(errors.eliminarUsuario.code)
           .send(errors.eliminarUsuario.message);
       }
-      res.send(202);
+      return res.send(202);
     } catch (error) {
-      res.sendStatus(500);
+      return res.sendStatus(500);
     }
   },
   //Genera el link de recuperacion de contraseña y lo envia por correo
@@ -125,10 +125,10 @@ module.exports = {
       if (!userEmail) {
         return res.status(401);
       }
-      res.status(200).send(userEmail);
+      return res.status(200).send(userEmail);
     } catch (error) {
       console.error("Error in forgotPassword controller", error);
-      res.status(500).json({ message: "internal error" });
+      return res.status(500).json({ message: "internal error" });
     }
   },
   //Una vez que el usuario recibe el correo con el link para cambiar la contraseña se procede a validar el token
@@ -142,7 +142,7 @@ module.exports = {
     User.findOne({ where: { token } })
       .then((user) => {
         if (!user) return res.sendStatus(401);
-        res.send(user).status(200);
+        return res.send(user).status(200);
       })
       .catch((error) => {
         console.log("Error when trying to validate token", error);
@@ -161,7 +161,7 @@ module.exports = {
         user.password = req.body.password;
         user.save().then(() => {
           //  res.sendStatus(200);
-          res.status(200).send(user);
+          return res.status(200).send(user);
         });
       })
       .catch((error) => {
@@ -183,7 +183,7 @@ module.exports = {
           if (!isValid) return res.sendStatus(401);
           user.password = newPassword;
           user.save().then(() => {
-            res.sendStatus(200);
+            return res.sendStatus(200);
           });
         });
       })

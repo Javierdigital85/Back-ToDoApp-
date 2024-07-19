@@ -14,16 +14,15 @@ module.exports = {
 
   obtener: async (req, res, next) => {
     try {
-      const { usuarioId } = req.query; //obtengo por clave y valor lo que envia el front por parametro de consulta
-      console.log(usuarioId, "esto vale userId");
+      const { userId } = req.query; //obtengo por clave y valor lo que envia el front por parametro de consulta
+      console.log(userId, "esto vale userId");
       let tasks;
-
-      if (usuarioId) {
-        tasks = await taskServices.singleTask(usuarioId);
+      if (userId) {
+        tasks = await taskServices.singleTask(userId);
       } else {
         tasks = await taskServices.allTasks();
       }
-      res.status(200).send(tasks);
+      return res.status(200).send(tasks);
     } catch (error) {
       return next(errors.tareaInexistente.code);
     }
@@ -36,9 +35,9 @@ module.exports = {
       if (!taskId) {
         throw errors.tareaInexistente;
       }
-      res.send(taskId);
+      return res.send(taskId);
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
   updateTask: async (req, res, next) => {
@@ -56,14 +55,14 @@ module.exports = {
         }
       );
       if (rows === 0) {
-        res
+        return res
           .status(errors.tareaActualizada.code)
           .send(errors.tareaActualizada.message);
       } else {
-        res.status(200).send(task[0]);
+        return res.status(200).send(task[0]);
       }
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 
@@ -78,7 +77,7 @@ module.exports = {
           .send(errors.taskDelete.message);
       await Task.destroy({ where: { id: id } });
       console.log(id);
-      res.sendStatus(204);
+      return res.sendStatus(204);
     } catch (error) {
       return next(error);
     }

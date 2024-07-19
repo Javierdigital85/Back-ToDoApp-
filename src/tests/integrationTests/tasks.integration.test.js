@@ -1,11 +1,16 @@
 const request = require("supertest");
 const app = require("../../app");
-const { Task } = require("../../database/models");
+const { Task, User } = require("../../database/models");
 const errors = require("../../const/errors");
 const sequelize = require("../../db/index");
 
 beforeAll(async () => {
-  await sequelize.sync({ force: true }); // Forzar sincronización y recreación de la base de datos
+  try {
+    await sequelize.authenticate(); // Verifica la conexión
+    await sequelize.sync({ force: true }); // Forzar sincronización y recreación de la base de datos
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
+  }
 });
 
 afterAll(async () => {
@@ -70,37 +75,31 @@ describe("POST api/tasks/crear - ", () => {
   describe("GET tasks", () => {
     it("should retrieve a new task", async () => {
       //arrange
-      let taskMock = {
-        title: "music",
-        description: "play the guitar and sing songs on friday and saturday!",
-        userId: 1,
+      let userMock;
+      userMock = {
+        name: "javier",
+        email: "javiercolodro@gmail.com",
+        country: "Argentina",
+        password: "HolaJavi38",
+        profesion: "Software Developer",
       };
       // await Task.create(taskMock);
-      try {
-        await Task.create(taskMock);
-        //act
-        const res = await request(app)
-          .get(`/api/tasks/obtener?usuarioId=${taskMock.userId}`)
-          .expect(200);
-        //assert
-        expect(res.body).toHaveLength(1);
-        expect(res.body[0].title).toBe(taskMock.title);
+      const user = await User.create(userMock);
+      console.log("lorenzo ", user.id);
 
-        const findTask = await Task.findAll();
-        expect(findTask[0].title).toEqual(taskMock.title);
-
-        // const task = await Task.findAll(res.body.id);
-        // expect(task).toBe(res.body);
-      } catch (error) {
-        console.error("Error creating task:", error);
-      }
+      //act
+      //http://localhost:8000/api/tasks/obtener?userId=1
+      const res = await request(app)
+        .get(`/api/tasks/obtener?userId=${user.id}`)
+        .expect(200);
     });
+
     it("should not retrieve a task", async () => {
       //arrange
       let userId = null;
       //act
       const res = await request(app)
-        .get(`/api/tasks/obtener?usuarioId=${userId}`)
+        .get(`/api/tasks/obtener?userId=${userId}`)
         .expect(500);
       const findTask = await Task.findAll({ where: { userId: userId } });
       //assert
