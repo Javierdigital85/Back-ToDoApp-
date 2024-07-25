@@ -44,22 +44,16 @@ module.exports = {
     const { id } = req.params; //Le decis que tarea actualizar
     const { title, description } = req.body; //Lo que vas a actualizar de esa tarea
     try {
-      const [rows, task] = await Task.update(
-        {
-          title,
-          description,
-        },
-        {
-          where: { id: id },
-          returning: true, // Esta opción indica a Sequelize que devuelva los registros actualizados
-        }
-      );
-      if (rows === 0) {
+      const updatedTask = await taskServices.updateTask(id, {
+        title,
+        description,
+      });
+      if (!updatedTask) {
         return res
           .status(errors.tareaActualizada.code)
           .send(errors.tareaActualizada.message);
       } else {
-        return res.status(200).send(task[0]);
+        return res.status(200).send(updatedTask);
       }
     } catch (error) {
       return next(error);
@@ -68,14 +62,15 @@ module.exports = {
 
   deleteTask: async (req, res, next) => {
     const { id } = req.params;
-    const task = await Task.findByPk(id);
+    const task = await taskServices.deleteTask(id);
+
     try {
       // if (!task) return next(errors.taskDelete.message);
       if (!task)
         return res
           .status(errors.taskDelete.code)
           .send(errors.taskDelete.message);
-      await Task.destroy({ where: { id: id } });
+      await taskServices.destroyTask(id);
       console.log(id);
       return res.sendStatus(204);
     } catch (error) {

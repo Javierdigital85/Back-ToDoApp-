@@ -10,10 +10,13 @@ module.exports = {
       const { email } = req.body;
       const userDB = await usuariosServices.findUserByEmail(email);
       if (userDB) {
+        console.log(errors.usuarioRegistrado.code, "el error");
+        console.log(errors.usuarioRegistrado.message, "el error");
         return res
           .status(errors.usuarioRegistrado.code)
           .send(errors.usuarioRegistrado.message);
       }
+
       const user = await usuariosServices.createUser(req.body);
       res.status(201);
       return res.send(user);

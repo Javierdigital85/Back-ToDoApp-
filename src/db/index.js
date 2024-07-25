@@ -22,6 +22,13 @@ if (globalConstants.NODE_ENV === "test") {
     {
       dialect: globalConstants.DIALECT, //TIPO DE BASE DE DATOS QUE NOS CONECTAMOS
       host: globalConstants.HOST,
+      port: 5432,
+      dialectOptions: {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false, // Ajusta esto según tus necesidades de seguridad
+        },
+      },
       logging: false,
     }
   );
