@@ -22,7 +22,7 @@ if (globalConstants.NODE_ENV === "test") {
     {
       dialect: globalConstants.DIALECT, //TIPO DE BASE DE DATOS QUE NOS CONECTAMOS
       host: globalConstants.HOST,
-      port: 5432,
+      port: globalConstants.PORT,
       dialectOptions: {
         ssl: {
           require: true,
