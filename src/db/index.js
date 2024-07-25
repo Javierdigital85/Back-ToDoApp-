@@ -20,7 +20,7 @@ if (globalConstants.NODE_ENV === "test") {
     globalConstants.DB_PASSWORD,
 
     {
-      dialect: globalConstants.DIALECT, //TIPO DE BASE DE DATOS QUE NOS CONECTAMOS
+      dialect: globalConstants.DIALECT ||'postgres', //TIPO DE BASE DE DATOS QUE NOS CONECTAMOS
       host: globalConstants.HOST,
       port: globalConstants.PORT,
       dialectOptions: {
