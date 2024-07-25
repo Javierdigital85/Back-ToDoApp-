@@ -5,7 +5,7 @@ const Sequelize = require("sequelize");
 let sequelize;
 
 if (globalConstants.NODE_ENV === "test") {
-  sequelize = new Sequelize({
+  sequelize = new Sequelize(globalConstants.DATABASE_URL, {
     dialect: globalConstants.TEST_DB_DIALECT,
     host: globalConstants.TEST_DB_HOST,
     username: globalConstants.TEST_DB_USERNAME,
@@ -20,7 +20,7 @@ if (globalConstants.NODE_ENV === "test") {
     globalConstants.DB_PASSWORD,
 
     {
-      dialect: globalConstants.DIALECT ||'postgres', //TIPO DE BASE DE DATOS QUE NOS CONECTAMOS
+      dialect: globalConstants.DIALECT || "postgres", //TIPO DE BASE DE DATOS QUE NOS CONECTAMOS
       host: globalConstants.HOST,
       port: globalConstants.PORT,
       dialectOptions: {
