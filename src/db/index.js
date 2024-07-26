@@ -17,7 +17,7 @@ if (globalConstants.NODE_ENV === "test") {
   sequelize = new Sequelize(globalConstants.DATABASE_URL, {
     dialect: globalConstants.DIALECT || "postgres", //TIPO DE BASE DE DATOS QUE NOS CONECTAMOS
     host: globalConstants.HOST,
-    port: 5432,
+    port: globalConstants.DB_PORT,
     dialectOptions: {
       ssl: {
         require: true,
