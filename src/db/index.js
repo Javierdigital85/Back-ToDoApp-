@@ -5,7 +5,7 @@ const Sequelize = require("sequelize");
 let sequelize;
 
 if (globalConstants.NODE_ENV === "test") {
-  sequelize = new Sequelize(globalConstants.DATABASE_URL, {
+  sequelize = new Sequelize({
     dialect: globalConstants.TEST_DB_DIALECT,
     host: globalConstants.TEST_DB_HOST,
     username: globalConstants.TEST_DB_USERNAME,
@@ -14,23 +14,17 @@ if (globalConstants.NODE_ENV === "test") {
     logging: false,
   });
 } else {
-  sequelize = new Sequelize(
-    globalConstants.DB_NAME,
-    globalConstants.DB_USERNAME,
-    globalConstants.DB_PASSWORD,
-
-    {
-      dialect: globalConstants.DIALECT || "postgres", //TIPO DE BASE DE DATOS QUE NOS CONECTAMOS
-      host: globalConstants.HOST,
-      port: globalConstants.PORT,
-      dialectOptions: {
-        ssl: {
-          require: true,
-          rejectUnauthorized: false, // Ajusta esto según tus necesidades de seguridad
-        },
+  sequelize = new Sequelize(globalConstants.DATABASE_URL, {
+    dialect: globalConstants.DIALECT || "postgres", //TIPO DE BASE DE DATOS QUE NOS CONECTAMOS
+    host: globalConstants.HOST,
+    port: 5432,
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false, // Ajusta esto según tus necesidades de seguridad
       },
-      logging: false,
-    }
-  );
+    },
+    logging: false,
+  });
 }
 module.exports = sequelize;
