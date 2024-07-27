@@ -36,7 +36,8 @@ module.exports = {
           .status(errors.usuarioInexistente.code)
           .send(errors.usuarioInexistente.message);
       }
-      const isValid = await usuariosServices.validatePassword(user, password);
+      //const isValid = await usuariosServices.validatePassword(user, password);
+      const isValid = await user.validatePassword(password);
 
       if (!isValid) {
         return res
