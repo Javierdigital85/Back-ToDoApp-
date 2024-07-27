@@ -51,7 +51,7 @@ module.exports = {
       };
       const token = generateToken(payload);
       res.cookie("token", token);
-      return res.send({ token, ...payload });
+      return res.status(200).send({ token, ...payload });
     } catch (error) {
       return res.sendStatus(500);
     }
