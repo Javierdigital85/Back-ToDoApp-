@@ -14,7 +14,7 @@ if (globalConstants.NODE_ENV === "test") {
     logging: false,
   });
 } else {
-  sequelize = new Sequelize(globalConstants.DATABASE_URL, {
+  sequelize = new Sequelize( {
     dialect: globalConstants.DIALECT || "postgres", //TIPO DE BASE DE DATOS QUE NOS CONECTAMOS
     host: globalConstants.HOST,
     port: globalConstants.DB_PORT,

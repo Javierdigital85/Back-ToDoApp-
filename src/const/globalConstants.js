@@ -23,5 +23,4 @@ module.exports = {
   TEST_DB_HOST: process.env.TEST_DB_HOST,
   TEST_DB_DIALECT: process.env.TEST_DB_DIALECT,
   DB_PORT: process.env.DB_PORT,
-  DATABASE_URL: process.env.DATABASE_URL,
 };
