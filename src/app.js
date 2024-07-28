@@ -20,7 +20,7 @@ const configuracionApi = (app) => {
     cors({
       origin: [
         "http://localhost:5173", // Local development
-        "front-to-do-ii9jlxdij-lorenzo-javiers-projects.vercel.app", //Production
+        "https://front-to-do-ii9jlxdij-lorenzo-javiers-projects.vercel.app", //Production
       ],
       credentials: true,
     })
