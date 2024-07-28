@@ -14,10 +14,13 @@ if (globalConstants.NODE_ENV === "test") {
     logging: false,
   });
 } else {
-  sequelize = new Sequelize( {
+  sequelize = new Sequelize({
     dialect: globalConstants.DIALECT || "postgres", //TIPO DE BASE DE DATOS QUE NOS CONECTAMOS
     host: globalConstants.HOST,
     port: globalConstants.DB_PORT,
+    username: globalConstants.DB_USERNAME,
+    password: globalConstants.DB_PASSWORD,
+    database: globalConstants.DB_NAME,
     dialectOptions: {
       ssl: {
         require: true,
