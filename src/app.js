@@ -20,8 +20,10 @@ const configuracionApi = (app) => {
     cors({
       origin: [
         "http://localhost:5173", // Local development
+        "http://localhost:4173",
         globalConstants.FRONTEND_URL, //Production
       ],
+      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
       credentials: true,
     })
   );

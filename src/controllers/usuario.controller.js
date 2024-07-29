@@ -51,7 +51,11 @@ module.exports = {
         lastName: user.lastName,
       };
       const token = generateToken(payload);
-      res.cookie("token", token);
+      res.cookie("token", token, {
+        sameSite: "none",
+        httpOnly: true,
+        secure: true,
+      });
       return res.status(200).send({ token, ...payload });
     } catch (error) {
       return res.sendStatus(500);
