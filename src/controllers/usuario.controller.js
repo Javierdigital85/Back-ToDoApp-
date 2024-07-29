@@ -63,7 +63,11 @@ module.exports = {
   },
 
   logout: async (req, res) => {
-    res.clearCookie("token");
+    res.clearCookie("token", {
+      sameSite: "none",
+      httpOnly: true,
+      secure: true,
+    });
     return res.sendStatus(204);
   },
 
