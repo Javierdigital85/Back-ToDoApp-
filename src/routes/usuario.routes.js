@@ -22,7 +22,7 @@ router.get(
   "/usuario/validate-token/:token",
   usuarioController.validateTokenRestorePassword
 );
-router.post("/overwrite-password/:id", usuarioController.overWritePassword);
+router.post("/overwrite-password/:token", usuarioController.overWritePassword);
 router.put("/changepassword/:id", usuarioController.changePassword);
 
 /**

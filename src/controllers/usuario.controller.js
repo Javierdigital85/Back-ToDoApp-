@@ -48,7 +48,6 @@ module.exports = {
         id: user.id,
         name: user.name,
         email: user.email,
-        lastName: user.lastName,
       };
       const token = generateToken(payload);
       res.cookie("token", token, {
@@ -151,7 +150,7 @@ module.exports = {
     const { user } = validateToken(token);
     if (!user) return res.sendStatus(401);
 
-    User.findOne({ where: { token } })
+    User.findOne({ where: { token: token } })
       .then((user) => {
         if (!user) return res.sendStatus(401);
         return res.send(user).status(200);
@@ -164,25 +163,40 @@ module.exports = {
 
   //En el momento en que el usuario le da click para confirmar la nueva contraseña y haya pasado por la validaciones del front vuelve a verificar si el token sigue siendo valido o si ha expirado y luego se guarda la nueva contraseña
   overWritePassword: async (req, res) => {
-    const id = req.params.id;
-    if (!id) return res.sendStatus(401);
-    User.findOne({ where: { id } })
-      .then((user) => {
-        if (!user) return res.sendStatus(401);
-        user.token = null;
-        user.password = req.body.password;
-        user.save().then(() => {
-          //  res.sendStatus(200);
-          return res.status(200).send(user);
+    const { token } = req.params;
+    // const id = req.params.id;
+    // if (!id) return res.sendStatus(401);
+    if (!token) return res.sendStatus(401);
+    const { user } = validateToken(token);
+    if (!user) return res.sendStatus(401);
+
+    User.findOne({ where: { token: token } }).then((user) => {
+      if (!user) return res.sendStatus(401);
+      //invalida el token
+      user.token = null;
+      //encripta la nueva contraseña antes de guardarla
+      return user
+        .hash(req.body.password, user.salt)
+        .then((hashedPassword) => {
+          user.password = hashedPassword;
+          //guarda la contaseña
+          return user.save();
+        })
+        .then((updatedUser) => {
+          //retornamos los datos del usuario, excepto la contraseña
+          return res.status(200).send({
+            message: "Password updated successfully!",
+            user: {
+              id: updatedUser.id,
+              name: updatedUser.name,
+              email: updatedUser.email,
+            },
+          });
+        })
+        .catch((error) => {
+          return res.status(500).send("Internal server");
         });
-      })
-      .catch((error) => {
-        return res
-          .status(errors.changePassword.code)
-          .send(errors.changePassword.message);
-        // console.error("Error when trying to overwrite password:", error);
-        // return res.status(500).send("Internal Server Error");
-      });
+    });
   },
 
   changePassword: async (req, res) => {

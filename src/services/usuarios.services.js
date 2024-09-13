@@ -40,6 +40,7 @@ module.exports = {
       if (!user) {
         return null;
       }
+      
       const token = generateToken(
         {
           id: user.id,
@@ -51,7 +52,7 @@ module.exports = {
         },
         "10"
       );
-      user.token = token;
+      user.token = token;//asignamos el token al campo 'token' de l usuario
       await user.save();
       const restorePasswordURL = `http://localhost:5173/repeat-password/${user.token}`;
 

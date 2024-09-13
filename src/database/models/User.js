@@ -45,10 +45,6 @@ User.init(
       type: Sequelize.TEXT,
       allowNull: true,
     },
-    oldPassword: {
-      type: Sequelize.TEXT,
-      allowNull: true,
-    },
     salt: {
       type: Sequelize.STRING,
     },
