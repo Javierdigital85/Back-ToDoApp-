@@ -10,7 +10,7 @@
     "test:users": "NODE_ENV=test jest src/tests/integrationTests/users.integration.test.js",
     "test:tasks": "NODE_ENV=test jest src/tests/integrationTests/tasks.integration.test.js",
     "test:detectOpenHandles": "jest --detectOpenHandles",
-    "start": "nodemon src/index.js",
+    "dev": "NODE_ENV=development nodemon src/index.js",
     "start:test": "NODE_ENV=test nodemon src/index.js",
     "db:create": "npx sequelize-cli db:create",
     "db:seed": "npx sequelize db:seed:all",
