@@ -13,7 +13,7 @@ if (globalConstants.NODE_ENV === "test") {
     database: globalConstants.TEST_DB_NAME,
     logging: false,
   });
-  console.log("esto es testing")
+  console.log("esto es testing");
 } else if (globalConstants.NODE_ENV === "development") {
   sequelize = new Sequelize({
     dialect: globalConstants.DIALECT || "postgres",
@@ -25,7 +25,7 @@ if (globalConstants.NODE_ENV === "test") {
     logging: false,
   });
   console.log("esto es desarrollo");
-} else {
+} else if (globalConstants.NODE_ENV === "production") {
   sequelize = new Sequelize({
     dialect: globalConstants.DIALECT || "postgres", //TIPO DE BASE DE DATOS QUE NOS CONECTAMOS
     host: globalConstants.HOST,
@@ -41,5 +41,7 @@ if (globalConstants.NODE_ENV === "test") {
     },
     logging: false,
   });
+} else {
+  console.error("Entorno no valido");
 }
 module.exports = sequelize;

@@ -11,6 +11,7 @@
     "test:tasks": "NODE_ENV=test jest src/tests/integrationTests/tasks.integration.test.js",
     "test:detectOpenHandles": "jest --detectOpenHandles",
     "dev": "NODE_ENV=development nodemon src/index.js",
+    "start": "NODE_ENV=production node src/index.js",
     "start:test": "NODE_ENV=test nodemon src/index.js",
     "db:create": "npx sequelize-cli db:create",
     "db:seed": "npx sequelize db:seed:all",
